@@ -52,7 +52,7 @@ export default class AuthService{
         try {
             await validateAll(data, rules, msg)
 
-            const response  = await Axios.post(`https://62c6ab7774e1381c0a6598ae.mockapi.io/register`, {
+            const response  = await Axios.get(`https://62c6ab7774e1381c0a6598ae.mockapi.io/register`, {
                 email:data.email,
                 password: data.password
             })

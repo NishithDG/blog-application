@@ -63,6 +63,8 @@ class App extends React.Component {
           <CreateArticle
           {...props}
           getArticleCategories={this.props.articleService.getArticleCategories}
+          createArticle = {this.props.articleService.createArticle}
+          token={this.state.authUser?this.state.authUser.token : null}
           />
         )} />
         <Route path="/article/:slugs" component={SingleArticle} />
