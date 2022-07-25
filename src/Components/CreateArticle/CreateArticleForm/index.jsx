@@ -30,7 +30,7 @@ const CreateArticle = ({ handleInputChange, categories, handleSubmit, errors }) 
                                         <input className="form-control form-control-lg" type="text" name="title" placeholder="Title" onChange={handleInputChange} />
                                     </div>
                                     <div className="form-group col-12 col-md-6">
-                                        <select name="channel" onChange={handleInputChange} id className="form-control form-control-lg">
+                                        <select name="category" onChange={handleInputChange} id className="form-control form-control-lg">
                                             <option value>Select category</option>
                                             {
                                                 categories.map(category =>

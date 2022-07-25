@@ -1,7 +1,6 @@
 
 import * as React from "react";
-import { Route, Link, BrowserRouter } from "react-router-dom";
-import { withRouter } from "react-router";
+import { Route } from "react-router-dom";
 import "./App.css";
 import CreateArticle from "./Components/CreateArticle";
 import Footer from "./Components/Footer";
@@ -12,7 +11,8 @@ import SingleArticle from "./Components/SingleArticle";
 import Welcome from "./Components/Welcome";
 import authService from "./services/auth";
 import PropTypes from 'prop-types';
-import ArticleService from "./services/article";
+import Auth from "./Components/Auth";
+import RedirectIfAuth from "./Components/RedirectIfAuth";
 
 
 
@@ -21,34 +21,36 @@ class App extends React.Component {
     super(props)
 
     this.state = {
-      authUser: null,
+      authUser:null,
+      articles: []
     }
   }
 
   componentDidMount() {
-    // const user = {
-    //   name:localStorage.getItem('user.name'),
-    //   email:localStorage.getItem('user.email'),
-    //   password:localStorage.getItem('user.password')
-
-
-    // }
     const user = localStorage.getItem('user')
     if (user) {
-      console.log('in user')
       this.setState({
-        authUser:JSON.parse(user),
+        authUser: JSON.parse(user),
       })
-     // console.log('user oopouut')
     }
+    console.log(this.state.authUser)
+    console.log(typeof(this.state.authUser))
   }
-    setAuthUser = (authUser) => {
-      this.setState({
-        authUser,
-      },()=>{
-        localStorage.setItem('user', JSON.stringify(authUser));
-        this.props.history.push('/');
-      })
+  setArticles = (articles) => {
+    this.setState({ articles })
+  }
+  setAuthUser = (authUser) => {
+    console.log('set auth called')
+    console.log(authUser)
+    console.log(this.state.authUser)
+    this.setState({
+      authUser, 
+    }, () => {
+      localStorage.setItem('user', JSON.stringify(authUser));
+      this.props.history.push('/');
+    })
+    console.log(this.state.authUser)
+    console.log('end')
   }
   render() {
     const { location } = this.props
@@ -58,31 +60,75 @@ class App extends React.Component {
           location.pathname !== '/login' && location.pathname !== '/register' &&
           <Navbar authUser={this.state.authUser} />
         }
-        <Route exact path="/" component={Welcome} />
-        <Route path="/articles/create" render={(props)=>(
+        <Route exact path="/" render={(props) => (
+          <Welcome
+            {...props}
+            getArticles={this.props.articleService.getArticles}
+            setArticles={this.setArticles}
+            deleteArticle={this.props.articleService.deleteArticle}
+          />
+        )} />
+        <Auth
+          path="/articles/create"
+          component={CreateArticle}
+          props={{
+            getArticleCategories: this.props.articleService.getArticleCategories,
+            createArticle: this.props.articleService.createArticle,
+            token: this.state.authUser ? this.state.authUser.token : null,
+          }}
+          isAuthenticated={this.state.authUser !== null}
+        />
+        {/* <Route path="/articles/create" render={(props) => (
           <CreateArticle
-          {...props}
-          getArticleCategories={this.props.articleService.getArticleCategories}
-          createArticle = {this.props.articleService.createArticle}
-          token={this.state.authUser?this.state.authUser.token : null}
+            {...props}
+            getArticleCategories={this.props.articleService.getArticleCategories}
+            createArticle={this.props.articleService.createArticle}
+            token={this.state.authUser ? this.state.authUser.token : null}
+          />
+        )} /> */}
+        <Route path="/article/:slugs" render={(props) => (
+          <SingleArticle
+            {...props}
+            getArticle={this.props.articleService.getArticle}
+            articles={this.state.articles}
           />
         )} />
-        <Route path="/article/:slugs" component={SingleArticle} />
-        <Route path="/login" render={(props)=>(
+        {/* <Route path="/login" render={(props) => (
           <Login
-          {...props}
-          setAuthUser = {this.setAuthUser}
-          loginUser = {this.props.authService.loginUser}
+            {...props}
+            setAuthUser={this.setAuthUser}
+            loginUser={this.props.authService.loginUser}
           />
-        )} />
-        <Route path="/register" render={(props) => (
-        <Signup
-          {...props}
-          registerUser={this.props.authService.registerUser}
-          setAuthUser={this.setAuthUser} />)}
+        )} /> */}
+        <RedirectIfAuth
+          path='/login'
+          component={Login}
+          props={{
+            setAuthUser:this.setAuthUser,
+            loginUser:this.props.authService.loginUser,
+            }
+          }
+          isAuthenticated={this.state.authUser !== null}
+        />
+        {/* <Route path="/register" render={(props) => (
+          <Signup
+            {...props}
+            registerUser={this.props.authService.registerUser}
+            setAuthUser={this.setAuthUser} />)}
+        /> */}
+        <RedirectIfAuth
+          path='/register'
+          component={Signup}
+          props={{
+            setAuthUser:this.setAuthUser,
+            registerUser:this.props.authService.registerUser,
+            }
+          }
+          isAuthenticated={this.state.authUser !== null}
         />
         {
-          location.pathname !== '/login' && location.pathname !== '/register' && <Footer />
+          location.pathname !== '/login' && location.pathname !== '/register' && 
+          <Footer />
         }
       </div>
     )

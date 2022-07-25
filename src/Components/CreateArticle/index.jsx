@@ -9,7 +9,7 @@ class CreateArticle extends React.Component{
         title:'',
         image:null,
         content:'',
-        channel:null,
+        category:null,
         errors:[],
         categories:[],          
       }
@@ -43,6 +43,7 @@ class CreateArticle extends React.Component{
     }
 
     render(){
+        console.log(this.props.token)
         return(
             <CreateArticleForm
             handleInputChange={this.handleInputChange}

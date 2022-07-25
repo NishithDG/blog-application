@@ -3,11 +3,13 @@ import { validateAll } from 'indicative/validator'
 //const { validateAll } = window;
 export default class AuthService{
     async registerUser(data){
+         var token = 'id' + (new Date()).getTime();
+
         const rules = {
             name: 'required|string',
             email: 'required|email',
             password: 'required|string|min:6|confirmed'
-        }
+        }   
         const msg = {
             required: 'This {{field}} is required',
             'email.email': 'Email is Invalid..',
@@ -18,10 +20,11 @@ export default class AuthService{
         try {
             await validateAll(data, rules, msg)
 
-            const response  = await Axios.post(`https://62c6ab7774e1381c0a6598ae.mockapi.io/register`, {
+            const response  = await Axios.post(`https://62c6ab7774e1381c0a6598ae.mockapi.io/Register`, {
                 name: data.name,
                 email:data.email,
-                password: data.password
+                password: data.password,
+                token:token,
             })
             console.log(response)
             return response.data    
@@ -52,7 +55,7 @@ export default class AuthService{
         try {
             await validateAll(data, rules, msg)
 
-            const response  = await Axios.get(`https://62c6ab7774e1381c0a6598ae.mockapi.io/register`, {
+            const response  = await Axios.get(`https://62c6ab7774e1381c0a6598ae.mockapi.io/Register`, {
                 email:data.email,
                 password: data.password
             })
