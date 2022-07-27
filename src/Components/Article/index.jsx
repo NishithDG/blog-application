@@ -14,7 +14,7 @@ const Article=({article})=>{
           </h3>
           <div className="link-color-default fs-12">
             
-            <a href="$">{article.category.name}</a>,<time>May 13, 2017</time>
+            <a href="$">{article.category}</a>, <time>{article.created_at}</time>
           </div>
         </header>
         <a href="blog-single.html">
@@ -22,12 +22,7 @@ const Article=({article})=>{
         </a>
         <div className="card-block">
           <p className="text-justify">
-            Together. Great. So good was saying, that cant first let called air
-            divide stars male isnt i. Herb third let may fourth divide. Greater
-            gathering land youll i their beast have. Shed form sea it wherein
-            fowl, spirit creeping living. Likeness creepeth you hath heaven.
-            Likeness, moveth fruitful behold. Open evening a air us behold.
-            Saying above moving second a subdue likeness after also second.
+            <b>{article.content}</b>
           </p>
           <p className="text-center mt-40">
             <Link className="btn btn-primary btn-round" to={`/article/${article.id}`}>
@@ -43,10 +38,12 @@ Article.propTypes = {
     id:PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     imageUrl: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
     slug:PropTypes.isRequired,
     category: PropTypes.shape({
       name: PropTypes.string.isRequired,
     }).isRequired,
+    category_id:PropTypes.string.isRequired,
     created_at: PropTypes.string.isRequired,
   }).isRequired,
  

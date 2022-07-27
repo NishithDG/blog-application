@@ -14,9 +14,18 @@ export default class ArticleService {
 
         return response.data
     }
-
+    async getUserArticles(myToken){ 
+        const response = await Axios.get("https://62c7d17e0f32635590cad3ff.mockapi.io/Article")
+        const articles = response.data
+        let newArticles= [];
+        for(let i=0;i<articles.length;i++){
+            if(articles[i].token == myToken){
+                newArticles.push(articles[i]);
+            }
+        }
+        return  newArticles;
+    }
     async deleteArticle(id){
-        console.log('delete article called')
         await Axios.delete(`https://62c7d17e0f32635590cad3ff.mockapi.io/Article/${id}`)
         return true
     }
@@ -34,8 +43,61 @@ export default class ArticleService {
     }
 
 
-    createArticle = async (data, token) => {
+    updateArticle = async (data, article, token) => {
+        const date = new Date();
+        const articleDate = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`
+        
+        let image
+        if (data.image) {
+           image = await this.uploadToCloudinary(data.image)
+          }
+        try {
 
+            const rules = {
+                title: 'required',
+                content: 'required',
+                category: 'required',
+            }
+
+            const message = {
+                required: 'The {{field}} is required',
+            }
+
+            await validateAll(data, rules, message,)
+
+
+            const response = await Axios.put(`https://62c7d17e0f32635590cad3ff.mockapi.io/Article/${article.id}`, {
+                title: data.title,
+                content: data.content,
+                category: data.category,
+                imageUrl: image?image.secure_url:article.imageUrl,
+                token:token,
+                created_at:articleDate,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            
+            return response.data
+        } catch (errors) {
+            console.log(errors)
+            if (errors.response) {
+                return Promise.reject(errors.response.data);
+            }
+
+            return Promise.reject(errors);
+        }
+
+
+
+    }
+
+    createArticle = async (data, token) => {
+        const date = new Date();
+        const articleDate = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`
+        
         const image = await this.uploadToCloudinary(data.image)
         if (!data.image) {
             return Promise.reject([{
@@ -60,8 +122,10 @@ export default class ArticleService {
             const response = await Axios.post(`https://62c7d17e0f32635590cad3ff.mockapi.io/Article`, {
                 title: data.title,
                 content: data.content,
-                category_id: data.category,
-                imageUrl: image.secure_url
+                category: data.category,
+                imageUrl: image.secure_url,
+                token:token,
+                created_at:articleDate,
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`,

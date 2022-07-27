@@ -13,6 +13,7 @@ import authService from "./services/auth";
 import PropTypes from 'prop-types';
 import Auth from "./Components/Auth";
 import RedirectIfAuth from "./Components/RedirectIfAuth";
+import UserArticles from "./Components/UserArticles";
 
 
 
@@ -65,7 +66,6 @@ class App extends React.Component {
             {...props}
             getArticles={this.props.articleService.getArticles}
             setArticles={this.setArticles}
-            deleteArticle={this.props.articleService.deleteArticle}
           />
         )} />
         <Auth
@@ -78,6 +78,30 @@ class App extends React.Component {
           }}
           isAuthenticated={this.state.authUser !== null}
         />
+        
+       <Auth
+          path="/user/articles"
+          component={UserArticles}
+          props={{
+            getUserArticles: this.props.articleService.getUserArticles,
+            setArticles: this.setArticles,
+            deleteArticle: this.props.articleService.deleteArticle,
+            token: this.state.authUser ? this.state.authUser.token : null,
+          }}
+          isAuthenticated={this.state.authUser !== null}
+        />
+        <Auth
+          path="/article/edit/:slug"
+          component={CreateArticle}
+          props={{
+            getArticleCategories: this.props.articleService.getArticleCategories,
+            createArticle: this.props.articleService.createArticle,
+            token: this.state.authUser ? this.state.authUser.token : null,
+            articles:this.state.articles,
+            updateArticle: this.props.articleService.updateArticle,
+          }}
+          isAuthenticated={this.state.authUser !== null}
+        />
         {/* <Route path="/articles/create" render={(props) => (
           <CreateArticle
             {...props}
@@ -86,7 +110,7 @@ class App extends React.Component {
             token={this.state.authUser ? this.state.authUser.token : null}
           />
         )} /> */}
-        <Route path="/article/:slugs" render={(props) => (
+        <Route path="/article/:slugs" exact render={(props) => (
           <SingleArticle
             {...props}
             getArticle={this.props.articleService.getArticle}

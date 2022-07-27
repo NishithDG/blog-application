@@ -28,15 +28,7 @@ class Welcome extends React.Component{
     this.props.setArticles(articles.data)
   }
 
-  deleteArticle = async (id) => {
-    await this.props.deleteArticle(id);
-
-    // remove article from list.
-    const articles = this.state.articles.filter(article => article.id !== id);
-    this.setState({
-      articles,
-    });
-  }
+  
 
   render(){
     return(
@@ -45,7 +37,6 @@ class Welcome extends React.Component{
       nextUrl={this.state.articles.next_page_url}
       prevUrl={this.state.articles.prev_page_url}
       handlePagination={this.handlePagination}
-      deleteArticle={this.deleteArticle}
       />
     )
   }

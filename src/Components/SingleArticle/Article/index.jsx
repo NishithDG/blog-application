@@ -13,7 +13,7 @@ const SingleArticle = ({article}) => (
     <div className="container text-center">
       <div className="row h-full">
         <div className="col-12 col-lg-8 offset-lg-2 align-self-center">
-          <p className="opacity-70">News</p>
+          <p className="opacity-70">{article.category}</p>
           <br />
           <h1 className="display-4 hidden-sm-down">
           {article.title}  
