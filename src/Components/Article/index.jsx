@@ -18,7 +18,9 @@ const Article=({article})=>{
           </div>
         </header>
         <a href="blog-single.html">
+          <div className="text-center">
           <img className="rounded" src={article.imageUrl} alt="..." />
+          </div>
         </a>
         <div className="card-block">
           <p className="text-justify">

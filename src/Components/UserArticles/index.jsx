@@ -39,6 +39,8 @@ class UserArticles extends React.Component{
     this.setState({
       articles,
     });
+    this.props.notyService.error('Article deleted')
+
   }
 
   render(){
@@ -65,6 +67,10 @@ UserArticles.propTypes={
   editArticle:PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
+  }).isRequired,
+  notyService: PropTypes.shape({
+    success: PropTypes.func.isRequired,
+    error: PropTypes.func.isRequired,
   }).isRequired,
 }
 

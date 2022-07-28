@@ -4,21 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, withRouter } from "react-router-dom";
-import Navbar from './Components/Navbar';
-import Welcome from './Components/Welcome';
-import CreateArticle from './Components/CreateArticle';
-import SingleArticle from './Components/SingleArticle';
-import Login from './Components/Login';
-import Signup from './Components/Signup';
-import Footer from './Components/Footer';
 import AuthService from './services/auth';
 import ArticleService from './services/article';
+import NotificationService from './services/notifications';
 
 const Main = withRouter((props) => {
   return (
     <App
       authService={new AuthService()}
       articleService = {new ArticleService()}
+      notyService = {new NotificationService()}
       {...props} />
   )
 })

@@ -98,7 +98,7 @@ export default class ArticleService {
         const date = new Date();
         const articleDate = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`
         
-        const image = await this.uploadToCloudinary(data.image)
+        
         if (!data.image) {
             return Promise.reject([{
               message: 'The image is required.',
@@ -108,6 +108,7 @@ export default class ArticleService {
 
             const rules = {
                 title: 'required',
+                image:'required',
                 content: 'required',
                 category: 'required',
             }
@@ -118,7 +119,7 @@ export default class ArticleService {
 
             await validateAll(data, rules, message,)
 
-
+            const image = await this.uploadToCloudinary(data.image)
             const response = await Axios.post(`https://62c7d17e0f32635590cad3ff.mockapi.io/Article`, {
                 title: data.title,
                 content: data.content,

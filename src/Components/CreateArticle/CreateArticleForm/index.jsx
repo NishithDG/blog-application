@@ -17,7 +17,6 @@ const CreateArticle = ({ handleInputChange, categories, handleSubmit, errors,edi
                         <div className="col-12 col-lg-12">  
                             <ul className='list-group'>
                                 {
-                                errors.length!==0 && 
                                 errors.map(error => <li key={error.message} className="list-group-item text-danger">{error.message}</li>)
                                 }
                             </ul>
@@ -30,8 +29,8 @@ const CreateArticle = ({ handleInputChange, categories, handleSubmit, errors,edi
                                         <input className="form-control form-control-lg" type="text" name="title" placeholder="Title" value={title} onChange={handleInputChange} />
                                     </div>
                                     <div className="form-group col-12 col-md-6">
-                                        <select name="category" onChange={handleInputChange} id className="form-control form-control-lg">
-                                            <option value={category}>Select category</option>
+                                        <select name="category" value={category} onChange={handleInputChange} id className="form-control form-control-lg">
+                                            <option value>Select category</option>
                                             {
                                                 categories.map(category =>
                                                     <option key={category.id} value={category.category_name}>{category.category_name}</option>
@@ -62,7 +61,7 @@ CreateArticle.propTypes = {
     })).isRequired,
     editing:PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    errors: PropTypes.isRequired,
+    errors: PropTypes.arrayOf(PropTypes.string).isRequired,
     article: PropTypes.shape({
         title: PropTypes.string.isRequired,
       }),

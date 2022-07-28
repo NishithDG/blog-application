@@ -41,17 +41,18 @@ class App extends React.Component {
     this.setState({ articles })
   }
   setAuthUser = (authUser) => {
-    console.log('set auth called')
-    console.log(authUser)
-    console.log(this.state.authUser)
     this.setState({
       authUser, 
     }, () => {
       localStorage.setItem('user', JSON.stringify(authUser));
       this.props.history.push('/');
+      this.props.notyService.success('Logged in successfully')
     })
-    console.log(this.state.authUser)
-    console.log('end')
+  }
+  removeAuthUser = () => {
+   localStorage.removeItem('user')    
+   this.props.notyService.info('Logout succesfully')
+   this.setState({authUser:null})  
   }
   render() {
     const { location } = this.props
@@ -59,7 +60,7 @@ class App extends React.Component {
       <div>
         {
           location.pathname !== '/login' && location.pathname !== '/register' &&
-          <Navbar authUser={this.state.authUser} />
+          <Navbar authUser={this.state.authUser} removeAuthUser = {this.removeAuthUser} />
         }
         <Route exact path="/" render={(props) => (
           <Welcome
@@ -75,8 +76,10 @@ class App extends React.Component {
             getArticleCategories: this.props.articleService.getArticleCategories,
             createArticle: this.props.articleService.createArticle,
             token: this.state.authUser ? this.state.authUser.token : null,
+            notyService:this.props.notyService,
           }}
           isAuthenticated={this.state.authUser !== null}
+          
         />
         
        <Auth
@@ -168,6 +171,7 @@ App.propTypes = {
   }).isRequired,
   authService: PropTypes.objectOf(PropTypes.func).isRequired,
   articleService: PropTypes.objectOf(PropTypes.func).isRequired,
+  notyService: PropTypes.objectOf(PropTypes.func).isRequired,
 }
 
 export default App;

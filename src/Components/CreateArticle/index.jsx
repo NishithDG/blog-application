@@ -46,14 +46,16 @@ class CreateArticle extends React.Component {
         event.preventDefault()
         try {
             const article = await this.props.createArticle(this.state, this.props.token)
+            this.props.notyService.success('Article Successfully Created')
             this.props.history.push("/")
         } catch (errors) {
             console.log(errors)
             this.setState({ errors })
+            this.props.notyService.error('Oppss...Something wents wrong, Please Try again...!!')
         }
     }
 
-    updateArticle = async(event)=>{
+    updateArticle = async (event) => {
         event.preventDefault()
         console.log('updating artcile')
         try{
@@ -63,10 +65,13 @@ class CreateArticle extends React.Component {
                 content:this.state.content,
                 category:this.state.category,
             },this.state.article,this.props.token)
-
+           // this.props.notyService.success('Article Successfully updated')
             this.props.history.push("/")
         }catch(errors){
+            console.log(errors)
+            //this.props.notyService.error('Oppss...Something wents wrong, Please Check...!!')
             this.setState({errors})
+
         }
     }
 
@@ -117,7 +122,11 @@ CreateArticle.propTypes = {
         content: PropTypes.string.isRequired,
         created_at: PropTypes.string.isRequired,
       })),
-      updateArticle:PropTypes.func.isRequired
+      updateArticle:PropTypes.func.isRequired,
+      notyService: PropTypes.shape({
+        success: PropTypes.func.isRequired,
+        error: PropTypes.func.isRequired,
+      }).isRequired,
 
 }
 export default CreateArticle;

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import PropTypes from 'prop-types'
-const Navbar = ({ authUser }) => {
+const Navbar = ({ authUser,removeAuthUser }) => {
   //authuser = false
   //console.log(authUser)
   return (
@@ -36,7 +36,7 @@ const Navbar = ({ authUser }) => {
                 </a>
                 <div className="nav-submenu">
                   <Link className="nav-link" to="/user/articles">My articles</Link>
-                  <a className="nav-link" href="true">Logout</a>
+                  <Link className="nav-link" to="/" onClick={()=>removeAuthUser()}>Logout</Link>
                 </div>
               </li>
             }
@@ -70,7 +70,7 @@ Navbar.propTypes = {
     name: PropTypes.string,
     token:PropTypes.string,
   }),
-
+  removeAuthUser: PropTypes.func.isRequired,
 
 
 
